@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>Processamento de Imagens</title>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="h-screen flex flex-col items-center justify-center">
+    <h1 class="font-medium leading-tight text-5xl">Processamento de Imagens</h1>
+
+    {% if data is defined %}
+    <div class="flex flex-col items-center justify-center" style="margin: .5rem 5rem;">
+      {{ data | safe }}
+    </div>
+    {% endif %}
+
+    {% if data is not defined %}
+    <form action="/" method="POST" enctype="multipart/form-data">
+      {{ csrf_field }}
+      <input type="hidden" name="type" />
+      <div>
+        <input type="file" name="file_upload" accept="image/png, image/jpeg" />
+      </div>
+      <div class="my-2">
+        <button class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded" type="submit">Matriz de Pixels</button>
+        <button class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded" type="submit">Escala de Cinza</button>
+        <button class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded" type="submit">Negativo</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.querySelector("form");
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const type = document.querySelector("[name='type']");
+      switch (e.submitter.textContent) {
+        case "Matriz de Pixels":
+          type.value = 1;
+          break;
+        case "Escala de Cinza":
+          type.value = 2;
+          break;
+        case "Negativo":
+          type.value = 3;
+          break;
+      }
+      form.submit();
+    });
+  </script>
+  {% endif %}
+</body>
+</html>
